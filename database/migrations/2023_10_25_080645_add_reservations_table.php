@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('course');
+            $table->boolean('confirmed')->nullable()->default(false);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

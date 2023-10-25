@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //public routes
 Route::get('/sport-articles', [SportArticleController::class, 'all']);
 Route::get('/sport-articles/{id}', [SportArticleController::class, 'detail']);
-Route::post('/reservations', [ReservationController::class, 'store']);
+Route::post('/reservations', [ReservationController::class, 'create']);
 
 Route::post('/register', [AuthController::class, "register"]);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -34,16 +34,16 @@ Route::fallback(function () {
 });
 
 //backoffice routes
-Route::middleware('auth:api')->group(function() {
-Route::get('/reservations', [ReservationController::class, 'all']);
-Route::get('/reservations/{id}', [ReservationController::class, 'detail']);
+//Route::middleware('auth:api')->group(function() {
+Route::get('/reservations', [ReservationController::class, 'all']); //done
+Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //done
 
-Route::post('/sport-articles', 'SportArticleController@store');
-Route::delete('/reservations/{id}', 'ReservationController@reject');
+Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
+Route::delete('/reservations/{id}', 'ReservationController@reject'); 
 
 Route::put('/reservations/{id}', 'ReservationController@update');
 Route::put('/reservations/approve/{id}', 'ReservationController@approve');
-});
+//});
 
 
 

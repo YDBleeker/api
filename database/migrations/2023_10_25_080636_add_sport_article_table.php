@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('sport_articles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('img');
+            $table->string('description');
+            $table->string('image');
             $table->integer('count');
             $table->timestamps();
         });
