@@ -14,7 +14,24 @@ class SportArticleController extends Controller
         $this->_sportArticleService = $sportArticleService;
     }
 
-    //make create function
+    public function detail($id)
+    {
+        $sportArticle = $this->_sportArticleService->getSportArticlesById($id);
+
+        if (!$sportArticle) {
+            return response()->json(['message' => 'SportArticle not found'], 404);
+        }
+
+        return response()->json($sportArticle);
+    }
+
+    public function all(Request $request)
+    {
+        $sportArticles = $this->_sportArticleService->getSportArticles();
+
+        return response()->json($sportArticles);
+    }
+
     public function create(Request $request)
     {
         $data = $request->only(['name', 'description', 'price', 'image', 'count']);

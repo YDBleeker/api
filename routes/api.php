@@ -22,12 +22,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //public routes
-Route::get('/sport-articles', [SportArticleController::class, 'all']);
-Route::get('/sport-articles/{id}', [SportArticleController::class, 'detail']);
+Route::get('/sport-articles', [SportArticleController::class, 'all']); //done
+Route::get('/sport-articles/{id}', [SportArticleController::class, 'detail']); //done
 Route::post('/reservations', [ReservationController::class, 'create']);
 
-Route::post('/register', [AuthController::class, "register"]);
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, "register"]); //done
+Route::post('/login', [AuthController::class, 'login'])->name('login'); //done
 
 Route::fallback(function () {
     return response()->json(['error' => 'Unauthenticated. Please provide a valid token.'], 401);
@@ -39,7 +39,7 @@ Route::get('/reservations', [ReservationController::class, 'all']); //done
 Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //done
 
 Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
-Route::delete('/reservations/{id}', 'ReservationController@reject'); 
+Route::delete('/reservations/{id}', 'ReservationController@reject');
 
 Route::put('/reservations/{id}', 'ReservationController@update');
 Route::put('/reservations/approve/{id}', 'ReservationController@approve');

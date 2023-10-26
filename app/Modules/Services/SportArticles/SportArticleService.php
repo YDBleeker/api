@@ -20,7 +20,18 @@ class SportArticleService extends Service
         parent::__construct($model);
     }
 
-    //create createSportArticle($data) function
+    public function getSportArticles()
+    {
+        $sportArticles = $this->_model->get();
+        return $sportArticles;
+    }
+
+    public function getSportArticlesById($id)
+    {
+        $sportArticle = $this->_model->find($id);
+        return $sportArticle;
+    }
+
     public function createSportArticle($data)
     {
         $this->validate($data);
