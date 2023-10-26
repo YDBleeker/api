@@ -28,9 +28,9 @@ class ReservationService extends Service
         //dd($week);
         $reservations = $this->_model
         ->with("sportarticle")
-        ->whereYear('start_date', $year)
-        ->whereMonth('start_date', $month)
-        ->where('start_date', $week)
+        //->whereYear('start_date', $year)
+        //->whereMonth('start_date', $month)
+        //->where('start_date', $week)
         ->get();
 
         return $reservations;
@@ -43,40 +43,30 @@ class ReservationService extends Service
             return;
         }
 
-        //TODO afwerken
-        //check on the start_date if there are enouf sport articles
-        $reservations = $this->_model
-        ->where('start_date', $data['start_date'])
-        ->where('sport_article_id', $data['sport_article_id'])
-        ->get();
-
-        /*
-        $start_date = new DateTime($data['start_date']);
-        $end_date = new DateTime($data['end_date']);
-        $interval = $start_date->diff($end_date);
-
-        $numDays = $interval->days;
-        */
-        checkAvailability($data['start_date'], $numDays)
-        {
-
-        }
-        
-        $sportArticle = SportArticle::find($data['sport_article_id']);
-
-        $count = $reservations->sum('count');
-
-        if ($count + $data['count'] > $sportArticle->count) {
-            $this->_errors->add('count', 'Not enouf sport articles');
-            return;
-        }
-        //
-
         $sportArticle = SportArticle::find($data['sport_article_id']);
         if (!$sportArticle) {
             $this->_errors->add('sport_article_id', 'Sport article not found');
             return;
         }
+
+        $reservations = $this->_model
+        ->where('sport_article_id', $data['sport_article_id'])
+        ->where(function ($query) use ($data) {
+            $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
+                  ->whereBetween('end_date', [$data['start_date'], $data['end_date']]);
+        })
+        ->get();
+
+        //dd($reservations)
+
+
+        /*$count = $reservations->sum('count');
+
+        if ($count + $data['count'] > $sportArticle->count) {
+            $this->_errors->add('count', 'Not enouf sport articles');
+            return;
+        }
+        */
 
         $model = $this->_model->create($data);
         return $model;
