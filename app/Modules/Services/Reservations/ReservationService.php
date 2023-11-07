@@ -69,7 +69,7 @@ class ReservationService extends Service
 
 
         $model = $this->_model->create($data);
-        mail::to($data['email'])->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
+        mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
         //make email of admin
         return $model;
     }
