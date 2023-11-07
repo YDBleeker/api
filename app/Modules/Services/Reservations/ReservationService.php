@@ -25,7 +25,6 @@ class ReservationService extends Service
 
     public function getReservations($year, $month, $week)
     {
-        //dd($week);
         $reservations = $this->_model
         ->with("sportarticle")
         //->whereYear('start_date', $year)
@@ -43,7 +42,7 @@ class ReservationService extends Service
             return;
         }
 
-        $sportArticle = SportArticle::find($data['sport_article_id']);
+        /*$sportArticle = SportArticle::find($data['sport_article_id']);
         if (!$sportArticle) {
             $this->_errors->add('sport_article_id', 'Sport article not found');
             return;
@@ -57,16 +56,14 @@ class ReservationService extends Service
         })
         ->get();
 
-        //dd($reservations)
+        dd($reservations)*/
+
+        //day + 1 loop over the $reservations parameter count every loop the items for that day in de reservations
+        //if the count is higher than the sport article count return error
+        //if not create reservation
 
 
-        /*$count = $reservations->sum('count');
 
-        if ($count + $data['count'] > $sportArticle->count) {
-            $this->_errors->add('count', 'Not enouf sport articles');
-            return;
-        }
-        */
 
         $model = $this->_model->create($data);
         return $model;
@@ -78,6 +75,32 @@ class ReservationService extends Service
         $reservation = $this->_model->find($id);
         return $reservation;
 
+    }
+
+    public function approveReservation($id)
+    {
+        $reservation = $this->_model->find($id);
+        if (!$reservation) {
+            $this->_errors->add('reservation', 'Reservation not found');
+            return;
+        }
+
+        $reservation->status = true;
+
+        return 'Reservation approved';
+    }
+
+    public function deleteReservation($id)
+    {
+        $reservation = $this->_model->find($id);
+        if (!$reservation) {
+            $this->_errors->add('reservation', 'Reservation not found');
+            return;
+        }
+
+        $reservation->delete();
+
+        return 'Reservation deleted';
     }
 
 

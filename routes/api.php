@@ -34,16 +34,20 @@ Route::fallback(function () {
 });
 
 //backoffice routes
-//Route::middleware('auth:api')->group(function() {
+Route::middleware('auth:api')->group(function() {
 Route::get('/reservations', [ReservationController::class, 'all']); //done
 Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //done
 
 Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
-Route::delete('/reservations/{id}', 'ReservationController@reject');
+Route::delete('/sport-articles/{id}', [SportArticleController::class, 'delete']); //done
+Route::post('/reservations/{id}', ReservationController::class, 'approve'); //done
 
-Route::put('/reservations/{id}', 'ReservationController@update');
-Route::put('/reservations/approve/{id}', 'ReservationController@approve');
-//});
+Route::delete('/reservations/{id}', ReservationController::class 'delete'); //done
+});
 
 
+//endpoint bevestigde reservaties filter
+//endpoint niet bevestigde reservaties filter 
+//mailing
+//reden annulatie reservatie (optioneel)
 

@@ -43,4 +43,11 @@ class SportArticleController extends Controller
 
         return response()->json($result);
     }
+
+    public function delete($id)
+    {
+        $message = $this->_sportArticleService->deleteSportArticle($id);
+
+        return response()->json($message);
+    }
 }

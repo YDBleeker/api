@@ -43,5 +43,17 @@ class SportArticleService extends Service
         return $model;
     }
 
+    public function deleteSportArticle($id)
+    {
+        $sportArticle = $this->_model->find($id);
+        if (!$sportArticle) {
+            $this->_errors->add('sport_article_id', 'Sport article not found');
+            return;
+        }
+
+        $sportArticle->delete();
+        return 'Sport article deleted';
+    }
+
 }
 
