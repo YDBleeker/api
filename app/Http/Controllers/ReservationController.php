@@ -19,8 +19,9 @@ class ReservationController extends Controller
         $year = $request->input('year', date('Y'));
         $month = $request->input('month', date('M'));
         $week = $request->input('week', date('W'));
+        $approved = $request->input('approved', false);
 
-        $reservations = $this->_reservationService->getReservations($year, $month, $week);
+        $reservations = $this->_reservationService->getReservations($year, $month, $week, $approved);
 
         return response()->json($reservations);
     }

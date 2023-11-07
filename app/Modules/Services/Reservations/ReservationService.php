@@ -5,6 +5,8 @@ namespace App\Modules\Services\Reservations;
 use App\Modules\Services\Service;
 use App\Models\Reservation;
 use App\Models\SportArticle;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ReservationEmail;
 
 class ReservationService extends Service
 {
@@ -23,13 +25,14 @@ class ReservationService extends Service
         parent::__construct($model);
     }
 
-    public function getReservations($year, $month, $week)
+    public function getReservations($year, $month, $week, $approved)
     {
         $reservations = $this->_model
         ->with("sportarticle")
         //->whereYear('start_date', $year)
         //->whereMonth('start_date', $month)
         //->where('start_date', $week)
+        ->where('status', $approved)
         ->get();
 
         return $reservations;
@@ -66,6 +69,8 @@ class ReservationService extends Service
 
 
         $model = $this->_model->create($data);
+        mail::to($data['email'])->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
+        //make email of admin
         return $model;
     }
 
