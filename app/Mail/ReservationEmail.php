@@ -12,6 +12,7 @@ class ReservationEmail extends Mailable
     public $sportArticleName;
     public $reservationStartDate;
     public $reservationEndDate;
+    public $count;
 
     /**
      * Create a new message instance.
@@ -21,24 +22,26 @@ class ReservationEmail extends Mailable
      * @param string $reservationDate
      * @param string $reservationEndDate
      */
-    public function __construct($userName, $sportArticleName, $reservationStartDate, $reservationEndDate)
+    public function __construct($userName, $sportArticleName, $count, $reservationStartDate, $reservationEndDate)
     {
         $this->userName = $userName;
         $this->sportArticleName = $sportArticleName;
         $this->reservationStartDate = $reservationStartDate;
         $this->reservationEndDate = $reservationEndDate;
+        $this->count = $count;
     }
 
     public function build()
     {
         return $this
-            ->subject('Reservation Confirmation')
+            ->subject('Reservatie Aanvraag - sportinovatiecampus')
             ->view('emails.reservation')
             ->with([
                 'userName' => $this->userName,
                 'sportArticleName' => $this->sportArticleName,
                 'reservationStartDate' => $this->reservationStartDate,
                 'reservationEndDate' => $this->reservationEndDate,
+                'count' => $this->count,
             ]);
     }
 

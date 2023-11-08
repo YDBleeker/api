@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('image');
             $table->integer('count');
+            $table->integer('max_reservation_days');
             $table->timestamps();
         });
     }

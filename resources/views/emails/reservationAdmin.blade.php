@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reservatie Aanvraag</title>
+    <title>Nieuwe Reservatie Aanvraag</title>
 </head>
 <body>
-    <p>Beste {{ $userName }},</p>
-    <p>We hebben jouw reservatieaanvraag goed ontvangen! Houd je e-mail in de gaten om te zien of je reservatie wordt goedgekeurd:</p>
+    <p>Beste,</p>
+    <p>Er is een nieuwe reservatieaanvraag toegekomen! Bevestig of annuleer deze aanvraag in de backoffice:</p>
 
     <table style="border: none; width: 100%;">
         <tr style="border: none;">
@@ -42,12 +42,7 @@
         </tr>
     </table>
 
-
-
-    <p>Bedankt voor het gebruik van ons systeem!</p>
-
     <p>Met vriendelijke groeten,</p>
-    <p>Sportinnovatiecampus Brugge</p>
-    <img src="{{ asset('images/logo.png') }}" alt="Howest Image">
+    <p>Sportinnovatiecampus Brugge Systeem</p>
 </body>
 </html>

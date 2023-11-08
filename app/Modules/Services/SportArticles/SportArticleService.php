@@ -13,6 +13,7 @@ class SportArticleService extends Service
         'description' => 'required|string',
         'image' => 'required|string',
         'count' => 'required|integer|min:0',
+        'max_reservation_days' => 'required|integer|min:1',
     ];
 
     public function __construct(SportArticle $model)
@@ -41,6 +42,23 @@ class SportArticleService extends Service
 
         $model = $this->_model->create($data);
         return $model;
+    }
+
+    public function updateSportArticle($id, $data)
+    {
+        $this->validate($data);
+        if ($this->hasErrors()) {
+            return;
+        }
+
+        $sportArticle = $this->_model->find($id);
+        if (!$sportArticle) {
+            $this->_errors->add('sport_article_id', 'Sport article not found');
+            return;
+        }
+
+        $sportArticle->update($data);
+        return $sportArticle;
     }
 
     public function deleteSportArticle($id)

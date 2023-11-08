@@ -13,6 +13,7 @@ class SportArticle extends Model
         'description',
         'image',
         'count',
+        'max_reservation_days',
     ];
 
     public function sport_article(){

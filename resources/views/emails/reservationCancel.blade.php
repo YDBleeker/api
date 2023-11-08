@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reservatie Aanvraag</title>
+    <title>Reservatie Goedgekeurd</title>
 </head>
 <body>
     <p>Beste {{ $userName }},</p>
-    <p>We hebben jouw reservatieaanvraag goed ontvangen! Houd je e-mail in de gaten om te zien of je reservatie wordt goedgekeurd:</p>
+    <p>Jouw reservatie is Afgekeurd! Dit is de reden dat je reservatie is afgekeurd: {{ $message }}. </p>
+    <p>Overzicht van de reservatie:</p>
 
     <table style="border: none; width: 100%;">
         <tr style="border: none;">
@@ -42,12 +43,9 @@
         </tr>
     </table>
 
-
-
     <p>Bedankt voor het gebruik van ons systeem!</p>
 
     <p>Met vriendelijke groeten,</p>
     <p>Sportinnovatiecampus Brugge</p>
-    <img src="{{ asset('images/logo.png') }}" alt="Howest Image">
 </body>
 </html>

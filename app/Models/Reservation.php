@@ -13,6 +13,7 @@ class Reservation extends Model
         'sport_article_id',
         'count',
         'name',
+        'phone',
         'email',
         'course',
         'confirmed',

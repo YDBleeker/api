@@ -7,6 +7,7 @@ use App\Models\Reservation;
 use App\Models\SportArticle;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationEmail;
+use App\Mail\ReservationAdminEmail;
 
 class ReservationService extends Service
 {
@@ -15,6 +16,7 @@ class ReservationService extends Service
         'count' => 'required|integer',
         'name' => 'required|string|max:255',
         'email' => 'required|email',
+        'phone' => 'required|string|max:255',
         'course' => 'required|string|max:255',
         'start_date' => 'required|date',
         'end_date' => 'required|date',
@@ -45,12 +47,12 @@ class ReservationService extends Service
             return;
         }
 
-        /*$sportArticle = SportArticle::find($data['sport_article_id']);
+        $sportArticle = SportArticle::find($data['sport_article_id']);
         if (!$sportArticle) {
             $this->_errors->add('sport_article_id', 'Sport article not found');
             return;
         }
-
+/*
         $reservations = $this->_model
         ->where('sport_article_id', $data['sport_article_id'])
         ->where(function ($query) use ($data) {
@@ -69,8 +71,8 @@ class ReservationService extends Service
 
 
         $model = $this->_model->create($data);
-        mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
-        //make email of admin
+        mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], $sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
+        mail::to("debleeker.yoni@gmail.com")->send(new ReservationAdminEmail($sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
         return $model;
     }
 
@@ -91,6 +93,7 @@ class ReservationService extends Service
         }
 
         $reservation->status = true;
+        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
 
         return 'Reservation approved';
     }
@@ -116,8 +119,8 @@ class ReservationService extends Service
             return;
         }
 
+        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($reservation['name'], 'test', 10, $reservation['start_date'], $reservation['end_date'], $cancelMessage));
         $reservation->delete();
-        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
 
         return 'Reservation canceled';
     }

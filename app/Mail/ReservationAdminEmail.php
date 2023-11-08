@@ -11,43 +11,45 @@ use Illuminate\Queue\SerializesModels;
 
 class ReservationAdminEmail extends Mailable
 {
-    use Queueable, SerializesModels;
+
+    public $sportArticleName;
+    public $reservationStartDate;
+    public $reservationEndDate;
+    public $count;
 
     /**
      * Create a new message instance.
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Reservation Admin Email',
-        );
-    }
-
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @param string $sportArticleName
+     * @param string $reservationDate
+     * @param string $reservationEndDate
+     * @param int $count
      */
-    public function attachments(): array
+    public function __construct($sportArticleName, $count, $reservationStartDate, $reservationEndDate)
     {
-        return [];
+        $this->sportArticleName = $sportArticleName;
+        $this->reservationStartDate = $reservationStartDate;
+        $this->reservationEndDate = $reservationEndDate;
+        $this->count = $count;
     }
+
+    public function build()
+    {
+        return $this
+            ->subject('Nieuwe Reservatie Aanvraag')
+            ->view('emails.reservationAdmin')
+            ->with([
+                'sportArticleName' => $this->sportArticleName,
+                'reservationStartDate' => $this->reservationStartDate,
+                'reservationEndDate' => $this->reservationEndDate,
+                'count' => $this->count,
+            ]);
+    }
+
+    /*public function attachments(): array
+    {
+        return [
+            Attachment::fromStorage(storage_path('path/to/attachment.pdf'), 'attachment.pdf'),
+        ];
+    }*/
 }

@@ -40,7 +40,8 @@ Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //do
 
 Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
 Route::delete('/sport-articles/{id}', [SportArticleController::class, 'delete']); //done
-Route::post('/reservations/{id}', [ReservationController::class, 'approve']); //done
+Route::put('/sport-articles/{id}', [SportArticleController::class, 'update']); //done
+Route::put('/reservations/{id}', [ReservationController::class, 'approve']); //done
 
 Route::delete('/reservations/{id}', [ReservationController::class, 'delete']); //done
 Route::delete('/reservations/{id}/cancel', [ReservationController::class, 'cancel']); //done

@@ -28,7 +28,7 @@ class ReservationController extends Controller
 
     public function create(Request $request)
     {
-        $data = $request->only(['start_date', 'end_date', 'sport_article_id', 'count', 'name', 'email', 'course']);
+        $data = $request->only(['start_date', 'end_date', 'sport_article_id', 'count', 'phone', 'name', 'email', 'course']);
         $result = $this->_reservationService->createReservation($data);
 
         if ($this->_reservationService->hasErrors()) {

@@ -34,8 +34,20 @@ class SportArticleController extends Controller
 
     public function create(Request $request)
     {
-        $data = $request->only(['name', 'description', 'price', 'image', 'count']);
+        $data = $request->only(['name', 'description', 'price', 'image', 'count', 'max_reservation_days']);
         $result = $this->_sportArticleService->createSportArticle($data);
+
+        if ($this->_sportArticleService->hasErrors()) {
+            return response()->json($this->_sportArticleService->getErrors(), 400);
+        }
+
+        return response()->json($result);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $data = $request->only(['name', 'description', 'price', 'image', 'count', 'max_reservation_days']);
+        $result = $this->_sportArticleService->updateSportArticle($id, $data);
 
         if ($this->_sportArticleService->hasErrors()) {
             return response()->json($this->_sportArticleService->getErrors(), 400);

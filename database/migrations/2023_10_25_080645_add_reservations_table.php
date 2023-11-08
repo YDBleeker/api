@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('count');
             $table->string('name');
             $table->string('email');
+            $table->string('phone');
             $table->string('course');
             $table->boolean('confirmed')->nullable()->default(false);
             $table->date('start_date');
