@@ -62,5 +62,13 @@ class ReservationController extends Controller
 
         return response()->json($message);
     }
+
+    public function cancel(Request $request, $id)
+    {
+        $cancelMessage = $request->input('message', "");
+        $message = $this->_reservationService->cancelReservation($id, $cancelMessage);
+
+        return response()->json($message);
+    }
 }
 

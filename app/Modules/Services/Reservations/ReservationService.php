@@ -108,7 +108,19 @@ class ReservationService extends Service
         return 'Reservation deleted';
     }
 
+    public function cancelReservation($id, $cancelMessage)
+    {
+        $reservation = $this->_model->find($id);
+        if (!$reservation) {
+            $this->_errors->add('reservation', 'Reservation not found');
+            return;
+        }
 
+        $reservation->delete();
+        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
+
+        return 'Reservation canceled';
+    }
 
 
 }

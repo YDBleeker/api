@@ -43,10 +43,10 @@ Route::delete('/sport-articles/{id}', [SportArticleController::class, 'delete'])
 Route::post('/reservations/{id}', [ReservationController::class, 'approve']); //done
 
 Route::delete('/reservations/{id}', [ReservationController::class, 'delete']); //done
+Route::delete('/reservations/{id}/cancel', [ReservationController::class, 'cancel']); //done
 //});
 
 
 //TODO
 //mailing bezig
-//reden annulatie reservatie (optioneel)
 
