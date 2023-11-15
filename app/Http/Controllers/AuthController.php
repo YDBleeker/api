@@ -28,15 +28,15 @@ class AuthController extends Controller
         if (!$token) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
-        return response([
+        /*return response([
             "status" => "success",
             "authorisation" => [
                 'token' => $token,
                 'type' => "bearer"
             ]
-        ], 200);
+        ], 200);*/
 
-        /*
+
         return response([
             "status" => "success"
         ], 200)->withCookie(
@@ -49,7 +49,7 @@ class AuthController extends Controller
             true,
             false,
             "None"
-        );*/
+        );
     }
 
 }
