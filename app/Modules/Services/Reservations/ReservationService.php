@@ -42,7 +42,10 @@ class ReservationService extends Service
             $query->where('start_date', $week);
         }
         if ($approved !== null) {
-            $query->where('status', $approved);
+            $query->where('confirmed', $approved);
+        }
+        else {
+            $query->where('confirmed', false);
         }
 
         $reservations = $query->get();
