@@ -8,6 +8,7 @@ use App\Models\SportArticle;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationEmail;
 use App\Mail\ReservationAdminEmail;
+use DateTime;
 
 class ReservationService extends Service
 {
@@ -27,15 +28,24 @@ class ReservationService extends Service
         parent::__construct($model);
     }
 
-    public function getReservations($year, $month, $week, $approved)
+    public function getReservations($year = null, $month = null, $week = null, $approved = null)
     {
-        $reservations = $this->_model
-        ->with("sportarticle")
-        //->whereYear('start_date', $year)
-        //->whereMonth('start_date', $month)
-        //->where('start_date', $week)
-        ->where('status', $approved)
-        ->get();
+        $query = $this->_model->with("sportarticle");
+
+        if ($year !== null) {
+            $query->whereYear('start_date', $year);
+        }
+        if ($month !== null) {
+            $query->whereMonth('start_date', $month);
+        }
+        if ($week !== null) {
+            $query->where('start_date', $week);
+        }
+        if ($approved !== null) {
+            $query->where('status', $approved);
+        }
+
+        $reservations = $query->get();
 
         return $reservations;
     }
@@ -47,41 +57,73 @@ class ReservationService extends Service
             return;
         }
 
+        //check if the sport article exists
         $sportArticle = SportArticle::find($data['sport_article_id']);
         if (!$sportArticle) {
             $this->_errors->add('sport_article_id', 'Sport article not found');
             return;
         }
-/*
+
+        //check how long the reservation is
+        $start_date = new DateTime($data['start_date']);
+        $end_date = new DateTime($data['end_date']);
+        $interval = $start_date->diff($end_date);
+        $days = $interval->format('%a');
+        if ($days > $sportArticle->max_reservation_days) {
+            $this->_errors->add('max_reservation_days', 'Reservation can not be longer than ' . $sportArticle->max_reservation_days . ' days');
+            return;
+        }
+
+        //get reservations in the same period
         $reservations = $this->_model
         ->where('sport_article_id', $data['sport_article_id'])
         ->where(function ($query) use ($data) {
-            $query->whereBetween('start_date', [$data['start_date'], $data['end_date']])
-                  ->whereBetween('end_date', [$data['start_date'], $data['end_date']]);
+            $query->where(function ($subquery) use ($data) {
+                $subquery->where('start_date', '<=', $data['end_date'])
+                    ->where('end_date', '>=', $data['start_date']);
+            });
         })
         ->get();
 
-        dd($reservations)*/
+        //check if the reservation limit is exceeded
+        $dayCounts = [];
+        foreach ($reservations as $reservation) {
+            $startDate = new DateTime($reservation->start_date);
+            $endDate = new DateTime($reservation->end_date);
+            $articleCount = $reservation->count;
 
-        //day + 1 loop over the $reservations parameter count every loop the items for that day in de reservations
-        //if the count is higher than the sport article count return error
-        //if not create reservation
+            while ($startDate <= $endDate) {
+                $day = $startDate->format('Y-m-d');
+                if (!isset($dayCounts[$day])) { //check if the key exist
+                    $dayCounts[$day] = 0;
+                }
+                $dayCounts[$day]+= $articleCount;
+                $startDate->modify('+1 day');
+            }
+        }
 
-
-
+        $availableSportArticleCount = $sportArticle->count;
+        foreach ($dayCounts as $day => $count) {
+            if ($count > $availableSportArticleCount) {
+                return ['error' => 'Reservation limit exceeded for one or more days'];
+            }
+        }
 
         $model = $this->_model->create($data);
-        mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], $sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
+        mail::to($data['email'])->send(new ReservationEmail($data['name'], $sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
         mail::to("debleeker.yoni@gmail.com")->send(new ReservationAdminEmail($sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
         return $model;
     }
 
     public function getReservationsById($id)
     {
-        //add error handling if reservation not found
         $reservation = $this->_model->find($id);
-        return $reservation;
+        if (!$reservation) {
+            $this->_errors->add('reservation', 'Reservation not found');
+            return;
+        }
 
+        return $reservation;
     }
 
     public function approveReservation($id)
@@ -92,8 +134,14 @@ class ReservationService extends Service
             return;
         }
 
+        $sportArticle = SportArticle::find($data['sport_article_id']);
+        if (!$sportArticle) {
+            $this->_errors->add('sport_article_id', 'Sport article not found');
+            return;
+        }
+
         $reservation->status = true;
-        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($data['name'], 'test', $data['start_date'], $data['end_date']));
+        mail::to($reservation['email'])->send(new ReservationEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date']));
 
         return 'Reservation approved';
     }
@@ -119,7 +167,13 @@ class ReservationService extends Service
             return;
         }
 
-        //mail::to("debleeker.yoni@gmail.com")->send(new ReservationEmail($reservation['name'], 'test', 10, $reservation['start_date'], $reservation['end_date'], $cancelMessage));
+        $sportArticle = SportArticle::find($data['sport_article_id']);
+        if (!$sportArticle) {
+            $this->_errors->add('sport_article_id', 'Sport article not found');
+            return;
+        }
+
+        mail::to($reservation['email'])->send(new ReservationEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date'], $cancelMessage));
         $reservation->delete();
 
         return 'Reservation canceled';

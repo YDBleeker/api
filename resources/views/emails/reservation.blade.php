@@ -48,6 +48,7 @@
 
     <p>Met vriendelijke groeten,</p>
     <p>Sportinnovatiecampus Brugge</p>
+    {{ asset('images/logo.png') }}
     <img src="{{ asset('images/logo.png') }}" alt="Howest Image">
 </body>
 </html>

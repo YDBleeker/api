@@ -34,7 +34,7 @@ Route::fallback(function () {
 });
 
 //backoffice routes
-//Route::middleware('auth:api')->group(function() {
+Route::middleware('auth:api')->group(function() {
 Route::get('/reservations', [ReservationController::class, 'all']); //done
 Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //done
 
@@ -45,9 +45,4 @@ Route::put('/reservations/{id}', [ReservationController::class, 'approve']); //d
 
 Route::delete('/reservations/{id}', [ReservationController::class, 'delete']); //done
 Route::delete('/reservations/{id}/cancel', [ReservationController::class, 'cancel']); //done
-//});
-
-
-//TODO
-//mailing bezig
-
+});
