@@ -16,10 +16,10 @@ class ReservationController extends Controller
 
     public function all(Request $request)
     {
-        $year = $request->input('year', date('Y'));
-        $month = $request->input('month', date('M'));
-        $week = $request->input('week', date('W'));
-        $approved = $request->input('approved', false);
+        $year = $request->input('year');
+        $month = $request->input('month');
+        $week = $request->input('week');
+        $approved = $request->input('approved');
 
         $reservations = $this->_reservationService->getReservations($year, $month, $week, $approved);
 
