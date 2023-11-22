@@ -42,7 +42,7 @@ class ReservationService extends Service
             $query->where('start_date', $week);
         }
         if ($approved !== null) {
-            $query->where('confirmed', $approved);
+            $query->where('confirmed', true);
         }
         else {
             $query->where('confirmed', false);
@@ -143,7 +143,7 @@ class ReservationService extends Service
             return;
         }
 
-        $reservation->confirmed = true;
+        $reservation->update(['confirmed' => true]);
         mail::to($reservation['email'])->send(new ReservationEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date']));
 
         return 'Reservation approved';
