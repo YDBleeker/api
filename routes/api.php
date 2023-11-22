@@ -34,15 +34,16 @@ Route::fallback(function () {
 });
 
 //backoffice routes
-Route::middleware('auth:api')->group(function() {
+//Route::middleware('auth:api')->group(function() {
 Route::get('/reservations', [ReservationController::class, 'all']); //done
 Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //done
 
 Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
 Route::delete('/sport-articles/{id}', [SportArticleController::class, 'delete']); //done
+Route::get('/sport-articles/image/{name}', [SportArticleController::class, 'downloadImage'])->name('image'); //done
 Route::put('/sport-articles/{id}', [SportArticleController::class, 'update']); //done
 Route::put('/reservations/{id}', [ReservationController::class, 'approve']); //done
 
 Route::delete('/reservations/{id}', [ReservationController::class, 'delete']); //done
 Route::delete('/reservations/{id}/cancel', [ReservationController::class, 'cancel']); //done
-});
+//});

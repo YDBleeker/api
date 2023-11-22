@@ -51,7 +51,7 @@ class ReservationController extends Controller
 
     public function approve($id)
     {
-        $message = $this->_reservationService->approveReservation($id);
+        $message = $this->_reservationService->approveReservation($id); approveReservation
 
         return response()->json($message);
     }

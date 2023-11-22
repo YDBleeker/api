@@ -34,8 +34,9 @@ class SportArticleController extends Controller
 
     public function create(Request $request)
     {
-        $data = $request->only(['name', 'description', 'price', 'image', 'count', 'max_reservation_days']);
-        $result = $this->_sportArticleService->createSportArticle($data);
+        $jsonData = json_decode($request->input('json_data'), true);
+        $image = $request->file('image');
+        $result = $this->_sportArticleService->createSportArticle($jsonData, $image);
 
         if ($this->_sportArticleService->hasErrors()) {
             return response()->json($this->_sportArticleService->getErrors(), 400);
@@ -61,5 +62,17 @@ class SportArticleController extends Controller
         $message = $this->_sportArticleService->deleteSportArticle($id);
 
         return response()->json($message);
+    }
+
+    public function downloadImage($name)
+    {
+
+        $path = storage_path('app/sport-articles/' . $name);
+
+        if (!file_exists($path)) {
+            return response()->json(['message' => 'Image not found'], 404);
+        }
+
+        return response()->download($path);
     }
 }
