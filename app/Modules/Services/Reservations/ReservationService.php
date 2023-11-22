@@ -137,12 +137,6 @@ class ReservationService extends Service
             return;
         }
 
-        $sportArticle = SportArticle::find($data['sport_article_id']);
-        if (!$sportArticle) {
-            $this->_errors->add('sport_article_id', 'Sport article not found');
-            return;
-        }
-
         $reservation->confirmed = true;
         mail::to($reservation['email'])->send(new ReservationEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date']));
 
