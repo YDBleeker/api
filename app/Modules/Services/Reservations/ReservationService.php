@@ -143,7 +143,7 @@ class ReservationService extends Service
             return;
         }
 
-        $reservation->status = true;
+        $reservation->confirmed = true;
         mail::to($reservation['email'])->send(new ReservationEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date']));
 
         return 'Reservation approved';
