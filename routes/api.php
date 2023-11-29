@@ -28,6 +28,7 @@ Route::post('/reservations', [ReservationController::class, 'create']);
 
 Route::post('/register', [AuthController::class, "register"]); //done
 Route::post('/login', [AuthController::class, 'login'])->name('login'); //done
+Route::get('/sport-articles/image/{name}', [SportArticleController::class, 'downloadImage'])->name('image'); //done
 
 Route::fallback(function () {
     return response()->json(['error' => 'Unauthenticated. Please provide a valid token.'], 401);
@@ -40,7 +41,6 @@ Route::get('/reservations/{id}', [ReservationController::class, 'detail']); //do
 
 Route::post('/sport-articles', [SportArticleController::class, 'create']); //done
 Route::delete('/sport-articles/{id}', [SportArticleController::class, 'delete']); //done
-Route::get('/sport-articles/image/{name}', [SportArticleController::class, 'downloadImage'])->name('image'); //done
 Route::put('/sport-articles/{id}', [SportArticleController::class, 'update']); //done
 Route::put('/reservations/{id}', [ReservationController::class, 'approve']); //done
 
