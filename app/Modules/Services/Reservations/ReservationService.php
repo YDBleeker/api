@@ -108,7 +108,8 @@ class ReservationService extends Service
         $availableSportArticleCount = $sportArticle->count;
         foreach ($dayCounts as $day => $count) {
             if ($count > $availableSportArticleCount) {
-                return ['error' => 'Reservation limit exceeded for one or more days'];
+                $this->_errors->add('count', 'Reservation limit exceeded for one or more days');
+                return;
             }
         }
 
