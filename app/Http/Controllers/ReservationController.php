@@ -70,5 +70,12 @@ class ReservationController extends Controller
 
         return response()->json($message);
     }
+
+    public function lent($id)
+    {
+        $message = $this->_reservationService->lent($id);
+
+        return response()->json($message);
+    }
 }
 

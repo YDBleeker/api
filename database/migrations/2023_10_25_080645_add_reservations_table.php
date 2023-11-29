@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('course');
             $table->boolean('confirmed')->nullable()->default(false);
+            $table->boolean('lent')->nullable()->default(false);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

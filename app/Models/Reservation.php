@@ -17,6 +17,7 @@ class Reservation extends Model
         'email',
         'course',
         'confirmed',
+        'lent',
         'start_date',
         'end_date',
     ];
