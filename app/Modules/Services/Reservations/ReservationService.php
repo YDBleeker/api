@@ -35,8 +35,14 @@ class ReservationService extends Service
         if ($year !== null) $query->whereYear('start_date', $year);
         if ($month !== null) $query->whereMonth('start_date', $month);
         if ($week !== null) $query->where('start_date', $week);
-        if ($approved !== null) $query->where('confirmed', $approved);
-        else $query->where('confirmed', false);
+
+
+        if ($approved !== null){
+            $query->where('confirmed', $approved);
+        }
+        else {
+            $query->where('confirmed', false);
+        }
 
         return $query->get();
     }
