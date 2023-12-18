@@ -84,5 +84,12 @@ class ReservationController extends Controller
 
         return response()->json($message);
     }
+
+    public function reduce($id)
+    {
+        $message = $this->_reservationService->reduceReservation($id);
+
+        return response()->json($message);
+    }
 }
 

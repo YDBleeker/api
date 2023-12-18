@@ -48,4 +48,5 @@ Route::put('/reservations/{id}', [ReservationController::class, 'approve']); //d
 Route::delete('/reservations/{id}', [ReservationController::class, 'delete']); //done
 Route::delete('/reservations/{id}/cancel', [ReservationController::class, 'cancel']); //done
 Route::put('/reservations/{id}/lent', [ReservationController::class, 'lent']); //done
+Route::put('/reservations/{id}/returned', [ReservationController::class, 'reduce']); //done
 });

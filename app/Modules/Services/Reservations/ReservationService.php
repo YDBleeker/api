@@ -218,9 +218,9 @@ class ReservationService extends Service
             return;
         }
 
-        $reservation->update(['lent' => false]);
+        $reservation->delete();
 
-        return 'Reservation reduced';
+        return 'Reservation deleted';
     }
 
     public function cancelReservation($id, $cancelMessage)
@@ -241,6 +241,19 @@ class ReservationService extends Service
         $reservation->delete();
 
         return 'Reservation canceled';
+    }
+
+    public function reduceReservation($id)
+    {
+        $reservation = $this->_model->find($id);
+        if (!$reservation) {
+            $this->_errors->add('reservation', 'Reservation not found');
+            return;
+        }
+
+        $reservation->update(['lent' => false]);
+
+        return 'Reservation reduced';
     }
 
     public function getReservationshistory()
