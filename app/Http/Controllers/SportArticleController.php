@@ -25,13 +25,6 @@ class SportArticleController extends Controller
         return response()->json($sportArticle);
     }
 
-    public function all(Request $request)
-    {
-        $sportArticles = $this->_sportArticleService->getSportArticles();
-
-        return response()->json($sportArticles);
-    }
-
     public function create(Request $request)
     {
         $jsonData = json_decode($request->input('json_data'), true);
@@ -75,4 +68,19 @@ class SportArticleController extends Controller
 
         return response()->download($path);
     }
+
+    public function all(Request $request)
+    {
+        if ($request->has(['start_date', 'end_date'])) {
+            $sportArticles = $this->_sportArticleService->getAvailableSportArticles(
+                $request->input('start_date'),
+                $request->input('end_date')
+            );
+        } else {
+            $sportArticles = $this->_sportArticleService->getSportArticles();
+        }
+
+        return response()->json($sportArticles);
+    }
+
 }

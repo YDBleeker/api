@@ -32,26 +32,15 @@ class ReservationService extends Service
     {
         $query = $this->_model->with("sportarticle");
 
-        if ($year !== null) {
-            $query->whereYear('start_date', $year);
-        }
-        if ($month !== null) {
-            $query->whereMonth('start_date', $month);
-        }
-        if ($week !== null) {
-            $query->where('start_date', $week);
-        }
-        if ($approved !== null) {
-            $query->where('confirmed', true);
-        }
-        else {
-            $query->where('confirmed', false);
-        }
+        if ($year !== null) $query->whereYear('start_date', $year);
+        if ($month !== null) $query->whereMonth('start_date', $month);
+        if ($week !== null) $query->where('start_date', $week);
+        if ($approved !== null) $query->where('confirmed', $approved);
+        else $query->where('confirmed', false);
 
-        $reservations = $query->get();
-
-        return $reservations;
+        return $query->get();
     }
+
 
     public function createReservation($data)
     {
@@ -64,6 +53,18 @@ class ReservationService extends Service
         $sportArticle = SportArticle::find($data['sport_article_id']);
         if (!$sportArticle) {
             $this->_errors->add('sport_article_id', 'Sport article not found');
+            return;
+        }
+
+        //check if start date is before end date
+        if ($data['start_date'] > $data['end_date']) {
+            $this->_errors->add('start_date', 'Start date must be before end date');
+            return;
+        }
+
+        //check if start date is in the past
+        if ($data['start_date'] < now()->format('Y-m-d')) {
+            $this->_errors->add('start_date', 'Start date must be in the future');
             return;
         }
 
@@ -118,6 +119,47 @@ class ReservationService extends Service
         mail::to(env('MAIL_TO'))->send(new ReservationAdminEmail($sportArticle['name'], $data['count'], $data['start_date'], $data['end_date']));
         return $model;
     }
+
+    public function checkSportArticleAvailability($sportArticleId, $start_date, $end_date, $availableSportArticleCount  )
+    {
+        $reservations = $this->_model
+            ->where('sport_article_id', $sportArticleId)
+            ->where(function ($query) use ($start_date, $end_date) {
+                $query->where('start_date', '<=', $end_date)
+                    ->where('end_date', '>=', $start_date);
+            })
+            ->get();
+
+        // Check if the reservation limit is exceeded
+        $dayCounts = [];
+        foreach ($reservations as $reservation) {
+            $startDate = new DateTime($reservation->start_date);
+            $endDate = new DateTime($reservation->end_date);
+            $articleCount = $reservation->count;
+
+            while ($startDate <= $endDate) {
+                $day = $startDate->format('Y-m-d');
+                $dayCounts[$day] = isset($dayCounts[$day]) ? $dayCounts[$day] : 0;
+                $dayCounts[$day] += $articleCount;
+                $startDate->modify('+1 day');
+            }
+        }
+
+        // Check if the sport article is available for the specified period
+        $availableSportArticles = $availableSportArticleCount;
+        foreach ($dayCounts as $day => $count) {
+
+            if ($count > $availableSportArticleCount) {
+                return 0;
+            }
+            if ($count < $availableSportArticles) {
+                $availableSportArticles = $availableSportArticles - $count;
+            }
+
+        }
+        return $availableSportArticles;
+    }
+
 
     public function getReservationsById($id)
     {
@@ -176,9 +218,9 @@ class ReservationService extends Service
             return;
         }
 
-        $reservation->delete();
+        $reservation->update(['lent' => false]);
 
-        return 'Reservation deleted';
+        return 'Reservation reduced';
     }
 
     public function cancelReservation($id, $cancelMessage)
@@ -200,6 +242,17 @@ class ReservationService extends Service
 
         return 'Reservation canceled';
     }
+
+    public function getReservationshistory()
+    {
+        $reservations = $this->_model->where('lent', false)
+                                     ->where('end_date', '<', now())
+                                     ->orderBy('end_date', 'desc')
+                                     ->get();
+
+        return $reservations;
+    }
+
 
 
 }

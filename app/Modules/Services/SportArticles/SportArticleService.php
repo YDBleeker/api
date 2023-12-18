@@ -4,20 +4,27 @@ namespace App\Modules\Services\SportArticles;
 
 use App\Models\SportArticle;
 use App\Modules\Services\Service;
+use App\Modules\Services\Reservations\ReservationService;
+
+
 
 class SportArticleService extends Service
 {
+
+    private ReservationService $reservationService;
 
     protected $_rules = [
         'name' => 'required|string|max:255',
         'description' => 'required|string',
         'count' => 'required|integer|min:0',
         'max_reservation_days' => 'required|integer|min:1',
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ];
 
-    public function __construct(SportArticle $model)
+    public function __construct(SportArticle $model, ReservationService $reservationService)
     {
         parent::__construct($model);
+        $this->reservationService = $reservationService;
     }
 
     public function getSportArticles()
@@ -26,6 +33,26 @@ class SportArticleService extends Service
 
         foreach ($sportArticles as $sportArticle) {
             $sportArticle->image = url(route('image', ['name' => $sportArticle->image]));
+        }
+
+        return $sportArticles;
+    }
+
+    public function getAvailableSportArticles($start_date, $end_date)
+    {
+        $sportArticles = $this->_model->get();
+
+        foreach ($sportArticles as $sportArticle) {
+            $sportArticle->image = url(route('image', ['name' => $sportArticle->image]));
+
+            $reservationCheck = $this->reservationService->checkSportArticleAvailability(
+                $sportArticle->id,
+                $start_date,
+                $end_date,
+                $sportArticle->count
+            );
+
+            $sportArticle->available = $reservationCheck;
         }
 
         return $sportArticles;
