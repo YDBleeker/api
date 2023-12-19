@@ -39,9 +39,12 @@ class ReservationService extends Service
 
         if ($approved !== null){
             $query->where('confirmed', $approved);
+            $query->where('history', false);
+
         }
         else {
             $query->where('confirmed', false);
+            $query->where('history', false);
         }
 
         return $query->get();
@@ -257,15 +260,14 @@ class ReservationService extends Service
             return;
         }
 
-        $reservation->update(['lent' => false]);
+        $reservation->update(['history' => true]);
 
         return 'Reservation reduced';
     }
 
     public function getReservationshistory()
     {
-        $reservations = $this->_model->where('lent', false)
-                                     ->where('end_date', '<', now())
+        $reservations = $this->_model->where('history', true)
                                      ->orderBy('end_date', 'desc')
                                      ->get();
 
