@@ -18,6 +18,7 @@ class Reservation extends Model
         'course',
         'confirmed',
         'lent',
+        'history',
         'start_date',
         'end_date',
     ];
