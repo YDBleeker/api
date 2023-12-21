@@ -67,6 +67,13 @@ class ReservationService extends Service
             return;
         }
 
+        //check if the sport article count is smaller than the reservation count
+        if ($sportArticle->count =< $data['count']) {
+            $this->_errors->add('count', 'Not enough sport articles available');
+            return;
+        }
+
+
         //check if start date is before end date
         if ($data['start_date'] > $data['end_date']) {
             $this->_errors->add('start_date', 'Start date must be before end date');
