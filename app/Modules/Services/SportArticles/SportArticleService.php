@@ -18,7 +18,6 @@ class SportArticleService extends Service
         'description' => 'required|string',
         'count' => 'required|integer|min:0',
         'max_reservation_days' => 'required|integer|min:1',
-        'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ];
 
     public function __construct(SportArticle $model, ReservationService $reservationService)
