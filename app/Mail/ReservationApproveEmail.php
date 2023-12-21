@@ -44,7 +44,7 @@ class ReservationApproveEmail extends Mailable
                 'reservationStartDate' => $this->reservationStartDate,
                 'reservationEndDate' => $this->reservationEndDate,
                 'count' => $this->count,
-                'username' => $this->username,
+                'userName' => $this->username,
             ]);
     }
 }

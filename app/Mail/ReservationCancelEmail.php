@@ -50,7 +50,7 @@ class ReservationCancelEmail extends Mailable
                 'reservationEndDate' => $this->reservationEndDate,
                 'count' => $this->count,
                 'message' => $this->message,
-                'username' => $this->username,
+                'userName' => $this->username,
                 'message' => $this->message,
             ]);
     }
