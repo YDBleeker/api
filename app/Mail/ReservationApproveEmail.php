@@ -25,12 +25,13 @@ class ReservationApproveEmail extends Mailable
      * @param string $reservationEndDate
      * @param int $count
      */
-    public function __construct($sportArticleName, $count, $reservationStartDate, $reservationEndDate)
+    public function __construct($sportArticleName, $count, $reservationStartDate, $reservationEndDate, $username)
     {
         $this->sportArticleName = $sportArticleName;
         $this->reservationStartDate = $reservationStartDate;
         $this->reservationEndDate = $reservationEndDate;
         $this->count = $count;
+        $this->username = $username;
     }
 
     public function build()
@@ -43,6 +44,7 @@ class ReservationApproveEmail extends Mailable
                 'reservationStartDate' => $this->reservationStartDate,
                 'reservationEndDate' => $this->reservationEndDate,
                 'count' => $this->count,
+                'username' => $this->username,
             ]);
     }
 }

@@ -28,12 +28,14 @@ class ReservationCancelEmail extends Mailable
      * @param string $message
      */
      */
-    public function __construct($sportArticleName, $count, $reservationStartDate, $reservationEndDate, $message)
+    public function __construct($sportArticleName, $count, $reservationStartDate, $reservationEndDate, $message, $username, $message)
     {
         $this->sportArticleName = $sportArticleName;
         $this->reservationStartDate = $reservationStartDate;
         $this->reservationEndDate = $reservationEndDate;
         $this->count = $count;
+        $this->message = $message;
+        $this->username = $username;
         $this->message = $message;
     }
 
@@ -47,6 +49,8 @@ class ReservationCancelEmail extends Mailable
                 'reservationStartDate' => $this->reservationStartDate,
                 'reservationEndDate' => $this->reservationEndDate,
                 'count' => $this->count,
+                'message' => $this->message,
+                'username' => $this->username,
                 'message' => $this->message,
             ]);
     }

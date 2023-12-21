@@ -198,7 +198,7 @@ class ReservationService extends Service
         }
 
         $reservation->update(['confirmed' => true]);
-        mail::to($reservation['email'])->send(new ReservationApproveEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date']));
+        mail::to($reservation['email'])->send(new ReservationApproveEmail($sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date'], $reservation['name']));
 
         return 'Reservation approved';
     }
@@ -248,7 +248,7 @@ class ReservationService extends Service
             return;
         }
 
-        mail::to($reservation['email'])->send(new ReservationCancelEmail($reservation['name'], $sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date'], $cancelMessage));
+        mail::to($reservation['email'])->send(new ReservationCancelEmail($sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date'], $reservation['name'], $cancelMessage));
         $reservation->delete();
 
         return 'Reservation canceled';
