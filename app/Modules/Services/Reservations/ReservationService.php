@@ -68,7 +68,7 @@ class ReservationService extends Service
         }
 
         //check if the sport article count is smaller than the reservation count
-        if ($sportArticle->count =< $data['count']) {
+        if ($sportArticle->count <= $data['count']) {
             $this->_errors->add('count', 'Not enough sport articles available');
             return;
         }
