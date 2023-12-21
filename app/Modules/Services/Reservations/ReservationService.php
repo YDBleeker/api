@@ -8,6 +8,8 @@ use App\Models\SportArticle;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReservationEmail;
 use App\Mail\ReservationAdminEmail;
+use App\Mail\ReservationApproveEmail;
+use App\Mail\ReservationCancelEmail;
 use DateTime;
 
 class ReservationService extends Service
