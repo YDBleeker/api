@@ -268,7 +268,8 @@ class ReservationService extends Service
 
     public function getReservationshistory($perPage = 10, $page = 1)
     {
-        $reservations = $this->_model->where('history', true)
+        $reservations = $this->_model->with("sportarticle")
+                                     ->where('history', true)
                                      ->orderBy('end_date', 'desc')
                                      ->paginate($perPage, ['*'], 'page', $page);
 
