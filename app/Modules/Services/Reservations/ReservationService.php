@@ -264,11 +264,11 @@ class ReservationService extends Service
         return 'Reservation reduced';
     }
 
-    public function getReservationshistory()
+    public function getReservationshistory($perPage = 10, $page = 1)
     {
         $reservations = $this->_model->where('history', true)
                                      ->orderBy('end_date', 'desc')
-                                     ->get();
+                                     ->paginate($perPage, ['*'], 'page', $page);
 
         return $reservations;
     }

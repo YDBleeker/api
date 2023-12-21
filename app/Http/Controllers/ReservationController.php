@@ -28,7 +28,11 @@ class ReservationController extends Controller
 
     public function history(Request $request)
     {
-        $reservations = $this->_reservationService->getReservationshistory();
+        $perPage = $request->input('per_page', 10);
+        $page = $request->input('page', 1);
+
+        $reservations = $this->_reservationService->getReservationshistory($perPage, $page);
+
 
         return response()->json($reservations);
     }
