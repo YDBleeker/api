@@ -23,6 +23,10 @@ class ReservationController extends Controller
 
         $reservations = $this->_reservationService->getReservations($year, $month, $week, $approved);
 
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
+
         return response()->json($reservations);
     }
 
@@ -33,6 +37,9 @@ class ReservationController extends Controller
 
         $reservations = $this->_reservationService->getReservationshistory($perPage, $page);
 
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
 
         return response()->json($reservations);
     }
@@ -54,7 +61,7 @@ class ReservationController extends Controller
         $reservation = $this->_reservationService->getReservationsById($id);
 
         if (!$reservation) {
-            return response()->json(['message' => 'Reservation not found'], 404);
+            return response()->json(['message' => 'Reservation not found'], 400);
         }
 
         return response()->json($reservation);
@@ -62,14 +69,22 @@ class ReservationController extends Controller
 
     public function approve($id)
     {
-        $message = $this->_reservationService->approveReservation($id);
+        $result = $this->_reservationService->approveReservation($id);
 
-        return response()->json($message);
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
+
+        return response()->json($result);
     }
 
     public function delete($id)
     {
         $message = $this->_reservationService->deleteReservation($id);
+
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
 
         return response()->json($message);
     }
@@ -79,6 +94,10 @@ class ReservationController extends Controller
         $cancelMessage = $request->input('message', "");
         $message = $this->_reservationService->cancelReservation($id, $cancelMessage);
 
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
+
         return response()->json($message);
     }
 
@@ -86,12 +105,20 @@ class ReservationController extends Controller
     {
         $message = $this->_reservationService->lent($id);
 
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
+
         return response()->json($message);
     }
 
     public function reduce($id)
     {
         $message = $this->_reservationService->reduceReservation($id);
+
+        if ($this->_reservationService->hasErrors()) {
+            return response()->json($this->_reservationService->getErrors(), 400);
+        }
 
         return response()->json($message);
     }

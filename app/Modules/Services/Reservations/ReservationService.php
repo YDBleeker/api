@@ -193,6 +193,7 @@ class ReservationService extends Service
     public function approveReservation($id)
     {
         $reservation = $this->_model->find($id);
+        //dd($reservation);
         if (!$reservation) {
             $this->_errors->add('reservation', 'Reservation not found');
             return;
@@ -204,7 +205,9 @@ class ReservationService extends Service
             return;
         }
 
+
         $reservation->update(['confirmed' => true]);
+        //dd($reservation);
         mail::to($reservation['email'])->send(new ReservationApproveEmail($sportArticle['name'], $reservation['count'], $reservation['start_date'], $reservation['end_date'], $reservation['name']));
 
         return 'Reservation approved';
