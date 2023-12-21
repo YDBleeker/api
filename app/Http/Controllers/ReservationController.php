@@ -24,7 +24,7 @@ class ReservationController extends Controller
         $reservations = $this->_reservationService->getReservations($year, $month, $week, $approved);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($reservations);
@@ -38,7 +38,7 @@ class ReservationController extends Controller
         $reservations = $this->_reservationService->getReservationshistory($perPage, $page);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($reservations);
@@ -50,7 +50,7 @@ class ReservationController extends Controller
         $result = $this->_reservationService->createReservation($data);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($result);
@@ -61,7 +61,7 @@ class ReservationController extends Controller
         $reservation = $this->_reservationService->getReservationsById($id);
 
         if (!$reservation) {
-            return response()->json(['message' => 'Reservation not found'], 400);
+            return response()->json(['message' => 'Reservation not found'], 404);
         }
 
         return response()->json($reservation);
@@ -72,7 +72,7 @@ class ReservationController extends Controller
         $result = $this->_reservationService->approveReservation($id);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($result);
@@ -83,7 +83,7 @@ class ReservationController extends Controller
         $message = $this->_reservationService->deleteReservation($id);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($message);
@@ -95,7 +95,7 @@ class ReservationController extends Controller
         $message = $this->_reservationService->cancelReservation($id, $cancelMessage);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($message);
@@ -106,7 +106,7 @@ class ReservationController extends Controller
         $message = $this->_reservationService->lent($id);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($message);
@@ -117,7 +117,7 @@ class ReservationController extends Controller
         $message = $this->_reservationService->reduceReservation($id);
 
         if ($this->_reservationService->hasErrors()) {
-            return response()->json($this->_reservationService->getErrors(), 400);
+            return response()->json($this->_reservationService->getErrors(), 404);
         }
 
         return response()->json($message);
