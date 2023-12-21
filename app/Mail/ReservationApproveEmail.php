@@ -36,7 +36,7 @@ class ReservationApproveEmail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Nieuwe Reservatie Aanvraag')
+            ->subject('Reservatie Aanvraag Goedgekeurd - sportinovatiecampus')
             ->view('emails.reservationApprove')
             ->with([
                 'sportArticleName' => $this->sportArticleName,

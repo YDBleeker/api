@@ -40,7 +40,7 @@ class ReservationCancelEmail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Nieuwe Reservatie Aanvraag')
+            ->subject('Reservatie Aanvraag Geannuleerd - sportinovatiecampus')
             ->view('emails.reservationAdmin')
             ->with([
                 'sportArticleName' => $this->sportArticleName,

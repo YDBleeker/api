@@ -36,7 +36,7 @@ class ReservationAdminEmail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Nieuwe Reservatie Aanvraag')
+            ->subject('Nieuwe Reservatie Aanvraag - sportinovatiecampus')
             ->view('emails.reservationAdmin')
             ->with([
                 'sportArticleName' => $this->sportArticleName,
