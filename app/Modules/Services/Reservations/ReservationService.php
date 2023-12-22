@@ -144,7 +144,8 @@ class ReservationService extends Service
             ->where('sport_article_id', $sportArticleId)
             ->where(function ($query) use ($start_date, $end_date) {
                 $query->where('start_date', '<=', $end_date)
-                    ->where('end_date', '>=', $start_date);
+                    ->where('end_date', '>=', $start_date)
+                    ->where('history', false);
             })
             ->get();
 
