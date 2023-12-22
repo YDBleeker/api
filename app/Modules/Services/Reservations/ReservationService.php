@@ -99,6 +99,7 @@ class ReservationService extends Service
         //get reservations in the same period
         $reservations = $this->_model
         ->where('sport_article_id', $data['sport_article_id'])
+        ->where('history', false)
         ->where(function ($query) use ($data) {
             $query->where(function ($subquery) use ($data) {
                 $subquery->where('start_date', '<=', $data['end_date'])
@@ -166,17 +167,20 @@ class ReservationService extends Service
 
         // Check if the sport article is available for the specified period
         $availableSportArticles = $availableSportArticleCount;
+        $countlist = [];
         foreach ($dayCounts as $day => $count) {
 
             if ($count >= $availableSportArticleCount) {
                 return 0;
             }
+
             if ($count < $availableSportArticles) {
-                $availableSportArticles = $availableSportArticles - $count;
+                $countlist[] = $availableSportArticles - $count;
             }
 
         }
-        return $availableSportArticles;
+
+        return min($countlist);
     }
 
 
