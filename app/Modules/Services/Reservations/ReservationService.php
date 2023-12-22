@@ -180,7 +180,13 @@ class ReservationService extends Service
 
         }
 
-        return min($countlist);
+        // Check if there's anything in the countlist array
+        if (!empty($countlist)) {
+            return min($countlist);
+        }
+
+        // If the countlist is empty, return the total count
+        return $maxAvailableSportArticles;
     }
 
 
