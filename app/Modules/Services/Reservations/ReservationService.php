@@ -167,7 +167,7 @@ class ReservationService extends Service
         $availableSportArticles = $availableSportArticleCount;
         foreach ($dayCounts as $day => $count) {
 
-            if ($count > $availableSportArticleCount) {
+            if ($count >= $availableSportArticleCount) {
                 return 0;
             }
             if ($count < $availableSportArticles) {
